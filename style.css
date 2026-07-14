@@ -2718,3 +2718,19 @@ footer {
     min-height: 115px;
   }
 }
+.hero-section {
+  padding-top: 100px;
+  padding-bottom: 75px;
+}
+
+.hero-logo {
+  width: 75px;
+  height: 75px;
+  display: block;
+  margin: 0 auto 20px;
+  object-fit: contain;
+}
+
+.hero-section h1 {
+  margin-top: 0;
+}
