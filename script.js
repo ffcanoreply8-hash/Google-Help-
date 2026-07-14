@@ -48,6 +48,23 @@
 
   const homeLink = byId("homeLink");
 
+  /*
+    Supabase configuration:
+    Use only your Project URL and Publishable key.
+    Never place a Secret or service_role key in browser code.
+  */
+  const SUPABASE_URL =
+    "https://YOUR_PROJECT_REFERENCE.supabase.co";
+
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_KLPB6bHWHMvXRXmenj8yyw_WEh_ADT9";
+
+  const supabaseClient =
+    window.supabase?.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
   function pageHasOpenLayer() {
     return Boolean(
       document.querySelector(".modal.open") ||
@@ -378,17 +395,87 @@
     });
   });
 
-  assessmentForm?.addEventListener("submit", (event) => {
-    event.preventDefault();
+  assessmentForm?.addEventListener(
+    "submit",
+    async (event) => {
+      event.preventDefault();
 
-    /*
-      The four classroom answers are not saved or transmitted.
-    */
+      if (!assessmentForm.reportValidity()) {
+        return;
+      }
 
-    assessmentForm.reset();
-    closeModal(assessmentModal);
-    openModal(resultModal);
-  });
+      if (!supabaseClient) {
+        window.alert(
+          "Supabase is not configured correctly."
+        );
+        return;
+      }
+
+      const submitButton =
+        assessmentForm.querySelector(
+          'button[type="submit"]'
+        );
+
+      const originalButtonText =
+        submitButton?.textContent || "Submit";
+
+      const responseData = {
+        malware_answer:
+          byId("malwareAnswer")?.value.trim() || "",
+        phishing_answer:
+          byId("phishingAnswer")?.value.trim() || "",
+        awareness_answer:
+          byId("awarenessAnswer")?.value.trim() || "",
+        improvement_answer:
+          byId("improvementAnswer")?.value.trim() || ""
+      };
+
+      if (
+        Object.values(responseData).some(
+          (answer) => answer.length === 0
+        )
+      ) {
+        window.alert(
+          "Please answer all four questions."
+        );
+        return;
+      }
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+      }
+
+      try {
+        const { error } = await supabaseClient
+          .from("awareness_responses")
+          .insert(responseData);
+
+        if (error) {
+          throw error;
+        }
+
+        assessmentForm.reset();
+        closeModal(assessmentModal);
+        openModal(resultModal);
+      } catch (error) {
+        console.error(
+          "Supabase submission failed:",
+          error
+        );
+
+        window.alert(
+          "Your answers could not be submitted. Please try again."
+        );
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent =
+            originalButtonText;
+        }
+      }
+    }
+  );
 
   finishLessonButton?.addEventListener("click", () => {
     closeModal(resultModal);
