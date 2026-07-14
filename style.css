@@ -1334,3 +1334,27 @@ footer {
     font-size: 24px;
   }
 }
+
+/* Custom Account Help logo */
+.brand-image {
+  width: 32px;
+  height: 32px;
+  display: block;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+
+/* Clearly visible spaces for the four written answers */
+.assessment-question textarea {
+  min-height: 130px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 15px;
+}
+
+@media (max-width: 650px) {
+  .assessment-question textarea {
+    min-height: 115px;
+  }
+}
