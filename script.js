@@ -1,460 +1,1336 @@
-(() => {
-  "use strict";
+* {
+  box-sizing: border-box;
+}
 
-  const helpSearch = document.getElementById("helpSearch");
-  const clearSearchButton = document.getElementById(
-    "clearSearch"
-  );
+:root {
+  --blue: #1a73e8;
+  --blue-dark: #1558b0;
+  --red: #ea4335;
+  --yellow: #fbbc04;
+  --green: #34a853;
+  --text: #202124;
+  --muted: #5f6368;
+  --border: #dadce0;
+  --light-background: #f8fafd;
+  --lighter-blue: #e8f0fe;
+  --danger-background: #fce8e6;
+  --danger-text: #b3261e;
+  --success-background: #e6f4ea;
+  --success-text: #137333;
+  --shadow: 0 8px 28px rgba(60, 64, 67, 0.18);
+}
 
-  const topicCards = Array.from(
-    document.querySelectorAll(".topic-card")
-  );
+html {
+  scroll-behavior: smooth;
+}
 
-  const noResults = document.getElementById("noResults");
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background: #ffffff;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
 
-  const topicModal = document.getElementById("topicModal");
+button,
+input {
+  font: inherit;
+}
 
-  const topicModalTitle = document.getElementById(
-    "topicModalTitle"
-  );
+button {
+  cursor: pointer;
+}
 
-  const topicModalDescription = document.getElementById(
-    "topicModalDescription"
-  );
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid rgba(26, 115, 232, 0.35);
+  outline-offset: 3px;
+}
 
-  const simulationModal = document.getElementById(
-    "simulationModal"
-  );
+.training-banner {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 18px;
+  background: #202124;
+  color: #ffffff;
+  font-size: 13px;
+  text-align: center;
+}
 
-  const simulationForm = document.getElementById(
-    "simulationForm"
-  );
+.training-banner strong {
+  letter-spacing: 0.08em;
+}
 
-  const openSimulationButton = document.getElementById(
-    "openSimulation"
-  );
+.training-banner span {
+  color: #d7d9dc;
+}
 
-  const startExerciseButton = document.getElementById(
-    "startExercise"
-  );
+.top-navigation {
+  min-height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 30px;
+  border-bottom: 1px solid var(--border);
+  background: #ffffff;
+}
 
-  const closeSimulationButton = document.getElementById(
-    "closeSimulation"
-  );
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  color: var(--text);
+  text-decoration: none;
+}
 
-  const clueItems = Array.from(
-    document.querySelectorAll(".clue-item")
-  );
+.brand-name {
+  font-size: 21px;
+  color: #5f6368;
+}
 
-  const clickableClues = Array.from(
-    document.querySelectorAll(".clickable-clue")
-  );
+.brand-symbol {
+  width: 29px;
+  height: 29px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  transform: rotate(45deg);
+}
 
-  const clueScore = document.getElementById("clueScore");
+.brand-symbol span {
+  display: block;
+  border-radius: 3px;
+}
 
-  const revealCluesButton = document.getElementById(
-    "revealClues"
-  );
+.brand-symbol .blue {
+  background: var(--blue);
+}
 
-  const resetCluesButton = document.getElementById(
-    "resetClues"
-  );
+.brand-symbol .red {
+  background: var(--red);
+}
 
-  const resultModal = document.getElementById("resultModal");
+.brand-symbol .yellow {
+  background: var(--yellow);
+}
 
-  const finishLessonButton = document.getElementById(
-    "finishLesson"
-  );
+.brand-symbol .green {
+  background: var(--green);
+}
 
-  const teacherButton = document.getElementById(
-    "teacherButton"
-  );
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-  const teacherPanel = document.getElementById(
-    "teacherPanel"
-  );
+.icon-button,
+.profile-button {
+  border: 0;
+  display: grid;
+  place-items: center;
+}
 
-  const closeTeacherPanelButton = document.getElementById(
-    "closeTeacherPanel"
-  );
+.icon-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: transparent;
+  color: #5f6368;
+  font-size: 20px;
+  font-weight: 600;
+}
 
-  const teacherStartExerciseButton =
-    document.getElementById("teacherStartExercise");
+.icon-button:hover {
+  background: #f1f3f4;
+}
 
-  const menuButton = document.getElementById("menuButton");
+.profile-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #ffffff;
+  font-weight: 700;
+}
 
-  const safetySidebar = document.getElementById(
-    "safetySidebar"
-  );
+.hero-section {
+  min-height: 350px;
+  display: grid;
+  place-items: center;
+  padding: 60px 24px;
+  background: var(--light-background);
+  text-align: center;
+}
 
-  const sidebarBackdrop = document.getElementById(
-    "sidebarBackdrop"
-  );
+.hero-content {
+  width: min(720px, 100%);
+}
 
-  const closeSafetySidebarButton = document.getElementById(
-    "closeSafetySidebar"
-  );
+.training-label,
+.section-label {
+  margin: 0 0 10px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+}
 
-  const safetySidebarLinks = Array.from(
-    safetySidebar.querySelectorAll("a")
-  );
+.hero-section h1 {
+  margin: 0 0 28px;
+  font-size: clamp(35px, 6vw, 48px);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
 
-  const sidebarInformationLinks = Array.from(
-    document.querySelectorAll(".sidebar-information-link")
-  );
+.search-wrapper {
+  position: relative;
+  width: min(680px, 100%);
+  margin: 0 auto;
+}
 
-  const homeLink = document.getElementById("homeLink");
+.search-wrapper input {
+  width: 100%;
+  height: 58px;
+  padding: 0 56px 0 54px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.16);
+  font-size: 17px;
+}
 
-  function updatePageScroll() {
-    const modalOpen = Boolean(
-      document.querySelector(".modal.open")
-    );
+.search-wrapper input:hover {
+  box-shadow: 0 2px 8px rgba(60, 64, 67, 0.2);
+}
 
-    const sidebarOpen =
-      safetySidebar.classList.contains("open");
+.search-wrapper input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 1px 5px rgba(26, 115, 232, 0.35);
+  outline: none;
+}
 
-    const teacherPanelOpen =
-      teacherPanel.classList.contains("open");
+.search-icon {
+  position: absolute;
+  left: 21px;
+  top: 50%;
+  width: 17px;
+  height: 17px;
+  border: 2px solid #5f6368;
+  border-radius: 50%;
+  transform: translateY(-58%);
+  pointer-events: none;
+}
 
-    document.body.style.overflow =
-      modalOpen || sidebarOpen || teacherPanelOpen
-        ? "hidden"
-        : "";
+.search-icon::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 2px;
+  right: -6px;
+  bottom: -3px;
+  border-radius: 2px;
+  background: #5f6368;
+  transform: rotate(45deg);
+}
+
+.clear-search {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #5f6368;
+  font-size: 24px;
+  transform: translateY(-50%);
+}
+
+.clear-search:hover {
+  background: #f1f3f4;
+}
+
+.hero-description {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.account-section,
+.topics-section,
+.lesson-section {
+  width: min(1040px, calc(100% - 40px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.account-section {
+  margin-top: 42px;
+}
+
+.account-card {
+  min-height: 112px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.account-avatar {
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.account-information {
+  flex: 1;
+}
+
+.account-information h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.account-information p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.outline-button,
+.primary-button,
+.text-button {
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.outline-button {
+  min-height: 42px;
+  padding: 9px 18px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--blue);
+}
+
+.outline-button:hover {
+  border-color: #c5d8f5;
+  background: #f8fbff;
+}
+
+.primary-button {
+  min-height: 44px;
+  padding: 10px 22px;
+  border: 1px solid var(--blue);
+  background: var(--blue);
+  color: #ffffff;
+}
+
+.primary-button:hover {
+  border-color: var(--blue-dark);
+  background: var(--blue-dark);
+}
+
+.text-button {
+  min-height: 42px;
+  padding: 9px 15px;
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+}
+
+.text-button:hover {
+  background: var(--lighter-blue);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.topics-section {
+  padding: 64px 0;
+}
+
+.topics-section > h2 {
+  margin: 0 0 24px;
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.topic-card {
+  min-height: 152px;
+  display: flex;
+  align-items: flex-start;
+  gap: 17px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--text);
+  text-align: left;
+  transition:
+    box-shadow 160ms ease,
+    transform 160ms ease,
+    border-color 160ms ease;
+}
+
+.topic-card:hover {
+  border-color: #c9cdd1;
+  box-shadow: 0 3px 10px rgba(60, 64, 67, 0.16);
+  transform: translateY(-2px);
+}
+
+.topic-card.hidden {
+  display: none;
+}
+
+.topic-icon {
+  flex: 0 0 auto;
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 20px;
+}
+
+.blue-icon {
+  background: #e8f0fe;
+  color: var(--blue);
+}
+
+.red-icon {
+  background: #fce8e6;
+  color: var(--red);
+}
+
+.yellow-icon {
+  background: #fef7e0;
+  color: #a86c00;
+}
+
+.green-icon {
+  background: #e6f4ea;
+  color: var(--green);
+}
+
+.topic-card strong,
+.topic-card small {
+  display: block;
+}
+
+.topic-card strong {
+  margin-bottom: 9px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.topic-card small {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.no-results {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.no-results h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.no-results p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.lesson-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 70px;
+  padding: 36px;
+  border-radius: 16px;
+  background: var(--lighter-blue);
+}
+
+.lesson-section h2 {
+  margin: 0 0 10px;
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.lesson-section p:last-child {
+  max-width: 650px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  background: #f8f9fa;
+}
+
+.footer-content {
+  width: min(1040px, calc(100% - 40px));
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin: 0 auto;
+  color: #5f6368;
+  font-size: 13px;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  place-items: center;
+  padding: 22px;
+}
+
+.modal.open {
+  display: grid;
+}
+
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(32, 33, 36, 0.62);
+}
+
+.information-modal,
+.result-card {
+  position: relative;
+  z-index: 2;
+  width: min(480px, 100%);
+  padding: 34px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.modal-close {
+  width: 39px;
+  height: 39px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #5f6368;
+  font-size: 25px;
+}
+
+.modal-close:hover {
+  background: #f1f3f4;
+}
+
+.information-modal > .modal-close {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+}
+
+.large-topic-icon {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 22px;
+  border-radius: 50%;
+  background: var(--lighter-blue);
+  color: var(--blue);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.information-modal h2,
+.result-card h2 {
+  margin: 0 0 14px;
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.information-modal p,
+.result-card > p {
+  margin: 0 0 25px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.simulation-window {
+  position: relative;
+  z-index: 2;
+  width: min(1020px, 100%);
+  max-height: calc(100vh - 44px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.7fr);
+  overflow: auto;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.3);
+}
+
+.simulation-warning {
+  grid-column: 1 / -1;
+  padding: 9px 16px;
+  background: #202124;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.browser-bar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: #f1f3f4;
+}
+
+.browser-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.browser-buttons span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #9aa0a6;
+}
+
+.fake-address {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 13px;
+  overflow: hidden;
+  border: 1px solid #dadce0;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #3c4043;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.address-warning {
+  margin-right: 6px;
+  color: var(--danger-text);
+}
+
+.browser-close {
+  width: 35px;
+  height: 35px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #5f6368;
+  font-size: 23px;
+}
+
+.browser-close:hover {
+  background: #e1e4e7;
+}
+
+.simulation-content {
+  padding: 42px clamp(24px, 5vw, 58px);
+  border-right: 1px solid var(--border);
+}
+
+.fake-brand {
+  margin-bottom: 24px;
+}
+
+.large-symbol {
+  width: 42px;
+  height: 42px;
+}
+
+.simulation-content h2 {
+  margin: 0 0 12px;
+  font-size: 29px;
+  font-weight: 400;
+}
+
+.fake-message {
+  margin: 0 0 22px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.urgent-alert {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 25px;
+  padding: 14px 16px;
+  border: 1px solid #f6aea8;
+  border-radius: 8px;
+  background: var(--danger-background);
+  color: var(--danger-text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.simulation-content form label {
+  display: block;
+  margin-bottom: 8px;
+  color: #3c4043;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.simulation-content input {
+  width: 100%;
+  height: 52px;
+  margin-bottom: 20px;
+  padding: 0 14px;
+  border: 1px solid #9aa0a6;
+  border-radius: 5px;
+  background: #ffffff;
+  color: var(--text);
+}
+
+.simulation-content input:focus {
+  border: 2px solid var(--blue);
+  outline: none;
+}
+
+.clue-field,
+.verification-request {
+  border-radius: 7px;
+}
+
+.fake-submit-button {
+  width: 100%;
+  height: 46px;
+  border: 0;
+  border-radius: 5px;
+  background: var(--blue);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.fake-submit-button:hover {
+  background: var(--blue-dark);
+}
+
+.simulation-privacy {
+  margin: 14px 0 0;
+  color: #80868b;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.clue-panel {
+  padding: 30px 24px;
+  background: #f8fafd;
+}
+
+.clue-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 21px;
+}
+
+.clue-heading h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.clue-score {
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  border-radius: 18px;
+  background: var(--lighter-blue);
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.clue-list {
+  display: grid;
+  gap: 10px;
+}
+
+.clue-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 31px 1fr;
+  gap: 11px;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--text);
+  text-align: left;
+}
+
+.clue-item:hover {
+  border-color: #b9c5d7;
+}
+
+.clue-number {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f1f3f4;
+  color: #5f6368;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.clue-item strong,
+.clue-item small {
+  display: block;
+}
+
+.clue-item strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.clue-item small {
+  max-height: 0;
+  overflow: hidden;
+  margin-top: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+  transition:
+    max-height 180ms ease,
+    margin-top 180ms ease;
+}
+
+.clue-item.found {
+  border-color: #9dcaa8;
+  background: var(--success-background);
+}
+
+.clue-item.found .clue-number {
+  background: var(--green);
+  color: #ffffff;
+}
+
+.clue-item.found small {
+  max-height: 80px;
+  margin-top: 5px;
+}
+
+.clue-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.clickable-clue {
+  cursor: pointer;
+}
+
+.clue-highlight {
+  outline: 4px solid rgba(251, 188, 4, 0.5);
+  outline-offset: 3px;
+}
+
+
+.assessment-modal {
+  z-index: 115;
+}
+
+.assessment-card {
+  position: relative;
+  z-index: 2;
+  width: min(720px, 100%);
+  max-height: calc(100vh - 44px);
+  padding: 36px;
+  overflow-y: auto;
+  border-radius: 15px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.assessment-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.assessment-heading {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-right: 48px;
+}
+
+.assessment-symbol {
+  flex: 0 0 auto;
+  width: 39px;
+  height: 39px;
+}
+
+.assessment-heading h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.assessment-heading .section-label {
+  margin-bottom: 7px;
+}
+
+.assessment-introduction {
+  margin: 25px 0;
+  padding: 16px 18px;
+  border-radius: 9px;
+  background: var(--lighter-blue);
+  color: #3c4043;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+#assessmentForm {
+  display: grid;
+  gap: 16px;
+}
+
+.assessment-question {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.assessment-question > span {
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.assessment-question textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 13px 14px;
+  resize: vertical;
+  border: 1px solid #9aa0a6;
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--text);
+  font: inherit;
+  line-height: 1.5;
+}
+
+.assessment-question textarea:focus {
+  border: 2px solid var(--blue);
+  outline: none;
+}
+
+.assessment-submit {
+  margin-top: 4px;
+}
+
+.result-modal {
+  z-index: 120;
+}
+
+.result-card {
+  text-align: center;
+}
+
+.shield-circle {
+  width: 66px;
+  height: 66px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: var(--success-background);
+  font-size: 29px;
+}
+
+.safety-steps {
+  margin: 22px 0;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f8fafd;
+  text-align: left;
+}
+
+.safety-steps h3 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.safety-steps ol {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.teacher-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 150;
+  width: min(420px, 100%);
+  height: 100vh;
+  padding: 26px;
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+  background: #ffffff;
+  box-shadow: -12px 0 40px rgba(60, 64, 67, 0.23);
+  transform: translateX(105%);
+  transition: transform 220ms ease;
+}
+
+.teacher-drawer.open {
+  transform: translateX(0);
+}
+
+.teacher-drawer-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.teacher-drawer-header h2 {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 400;
+}
+
+.teacher-content {
+  padding-top: 25px;
+}
+
+.teacher-content h3 {
+  margin: 0 0 13px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.teacher-content ol {
+  padding-left: 22px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.teacher-note {
+  margin: 24px 0;
+  padding: 17px;
+  border-radius: 9px;
+  background: var(--lighter-blue);
+}
+
+.teacher-note p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+@media (max-width: 850px) {
+  .topic-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  function filterTopics() {
-    const searchValue = helpSearch.value
-      .trim()
-      .toLowerCase();
-
-    let visibleTopics = 0;
-
-    topicCards.forEach((card) => {
-      const searchableText = `
-        ${card.dataset.title}
-        ${card.dataset.description}
-        ${card.textContent}
-      `.toLowerCase();
-
-      const matchesSearch =
-        searchValue === "" ||
-        searchableText.includes(searchValue);
-
-      card.classList.toggle("hidden", !matchesSearch);
-
-      if (matchesSearch) {
-        visibleTopics += 1;
-      }
-    });
-
-    noResults.hidden = visibleTopics !== 0;
-
-    clearSearchButton.style.visibility =
-      searchValue === "" ? "hidden" : "visible";
+  .simulation-window {
+    grid-template-columns: 1fr;
   }
 
-  function openModal(modal) {
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden", "false");
+  .simulation-content {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+}
 
-    updatePageScroll();
+@media (max-width: 650px) {
+  .top-navigation {
+    padding: 0 18px;
   }
 
-  function closeModal(modal) {
-    modal.classList.remove("open");
-    modal.setAttribute("aria-hidden", "true");
-
-    updatePageScroll();
+  .brand-name {
+    font-size: 18px;
   }
 
-  function openSafetySidebar() {
-    safetySidebar.classList.add("open");
-    sidebarBackdrop.classList.add("open");
-
-    safetySidebar.setAttribute("aria-hidden", "false");
-    sidebarBackdrop.setAttribute("aria-hidden", "false");
-    menuButton.setAttribute("aria-expanded", "true");
-
-    updatePageScroll();
-    closeSafetySidebarButton.focus();
+  .account-card,
+  .lesson-section {
+    align-items: stretch;
+    flex-direction: column;
   }
 
-  function closeSafetySidebar() {
-    safetySidebar.classList.remove("open");
-    sidebarBackdrop.classList.remove("open");
-
-    safetySidebar.setAttribute("aria-hidden", "true");
-    sidebarBackdrop.setAttribute("aria-hidden", "true");
-    menuButton.setAttribute("aria-expanded", "false");
-
-    updatePageScroll();
+  .topic-grid {
+    grid-template-columns: 1fr;
   }
 
-  function openTopic(card) {
-    topicModalTitle.textContent =
-      card.dataset.title || "Help topic";
-
-    topicModalDescription.textContent =
-      card.dataset.description ||
-      "This topic is part of the classroom security lesson.";
-
-    openModal(topicModal);
+  .lesson-section {
+    padding: 27px;
   }
 
-  function updateClueScore() {
-    const foundCount = clueItems.filter((item) =>
-      item.classList.contains("found")
-    ).length;
-
-    clueScore.textContent = String(foundCount);
+  .footer-content {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 13px;
+    padding: 24px 0;
   }
 
-  function highlightClue(clueName) {
-    clickableClues.forEach((element) => {
-      if (element.dataset.clue === clueName) {
-        element.classList.add("clue-highlight");
-
-        window.setTimeout(() => {
-          element.classList.remove("clue-highlight");
-        }, 1300);
-      }
-    });
+  .browser-buttons {
+    display: none;
   }
 
-  function markClue(clueName) {
-    const clueItem = clueItems.find(
-      (item) => item.dataset.answer === clueName
-    );
-
-    if (!clueItem) {
-      return;
-    }
-
-    clueItem.classList.add("found");
-
-    highlightClue(clueName);
-    updateClueScore();
+  .simulation-content {
+    padding: 30px 22px;
   }
 
-  function resetClues() {
-    clueItems.forEach((item) => {
-      item.classList.remove("found");
-    });
+  .clue-panel {
+    padding: 24px 18px;
+  }
+}
+/* Left safety navigation */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
 
-    clickableClues.forEach((element) => {
-      element.classList.remove("clue-highlight");
-    });
+.menu-button {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+}
 
-    simulationForm.reset();
-    updateClueScore();
+.menu-button:hover {
+  background: #f1f3f4;
+}
+
+.menu-button span {
+  width: 22px;
+  height: 2px;
+  display: block;
+  border-radius: 2px;
+  background: #5f6368;
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  background: rgba(32, 33, 36, 0.42);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 220ms ease,
+    visibility 220ms ease;
+}
+
+.sidebar-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.safety-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  width: min(330px, 88vw);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+  background: #ffffff;
+  box-shadow: 12px 0 36px rgba(60, 64, 67, 0.22);
+  transform: translateX(-105%);
+  transition: transform 220ms ease;
+}
+
+.safety-sidebar.open {
+  transform: translateX(0);
+}
+
+.safety-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.safety-sidebar-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.sidebar-close {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #5f6368;
+  font-size: 27px;
+}
+
+.sidebar-close:hover {
+  background: #f1f3f4;
+}
+
+.safety-sidebar-navigation {
+  display: grid;
+  gap: 4px;
+  padding-top: 18px;
+}
+
+.safety-sidebar-navigation a {
+  padding: 13px 12px;
+  border-radius: 7px;
+  color: var(--text);
+  font-size: 17px;
+  text-decoration: none;
+}
+
+.safety-sidebar-navigation a:hover {
+  background: #f1f3f4;
+}
+
+.safety-sidebar-navigation a:first-child {
+  font-size: 16px;
+}
+
+.safety-sidebar-footer {
+  display: grid;
+  gap: 4px;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.safety-sidebar-footer a {
+  padding: 10px 12px;
+  border-radius: 7px;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.safety-sidebar-footer a:hover {
+  background: #f1f3f4;
+  color: var(--text);
+}
+
+@media (max-width: 650px) {
+  .top-navigation {
+    gap: 12px;
   }
 
-  function openSimulation() {
-    resetClues();
-    openModal(simulationModal);
+  .nav-left {
+    gap: 9px;
   }
 
-  function closeSimulation() {
-    simulationForm.reset();
-    closeModal(simulationModal);
+  .menu-button {
+    width: 40px;
+    height: 40px;
+    padding: 0 9px;
   }
 
-  function openTeacherPanel() {
-    teacherPanel.classList.add("open");
-    teacherPanel.setAttribute("aria-hidden", "false");
+  .brand-symbol {
+    width: 25px;
+    height: 25px;
+  }
+}
 
-    updatePageScroll();
+
+/* Keep the warning-sign panel hidden and center the verification form. */
+.clue-panel {
+  display: none;
+}
+
+.simulation-window {
+  width: min(720px, 100%);
+  grid-template-columns: 1fr;
+}
+
+.simulation-content {
+  border-right: 0;
+  border-bottom: 0;
+}
+
+@media (max-width: 650px) {
+  .assessment-card {
+    padding: 28px 20px 22px;
   }
 
-  function closeTeacherPanel() {
-    teacherPanel.classList.remove("open");
-    teacherPanel.setAttribute("aria-hidden", "true");
-
-    updatePageScroll();
+  .assessment-heading {
+    align-items: flex-start;
+    gap: 14px;
   }
 
-  helpSearch.addEventListener("input", filterTopics);
-
-  clearSearchButton.addEventListener("click", () => {
-    helpSearch.value = "";
-
-    filterTopics();
-    helpSearch.focus();
-  });
-
-  topicCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      openTopic(card);
-    });
-  });
-
-  document
-    .querySelectorAll('[data-close-modal="topic"]')
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        closeModal(topicModal);
-      });
-    });
-
-  menuButton.addEventListener(
-    "click",
-    openSafetySidebar
-  );
-
-  closeSafetySidebarButton.addEventListener(
-    "click",
-    closeSafetySidebar
-  );
-
-  sidebarBackdrop.addEventListener(
-    "click",
-    closeSafetySidebar
-  );
-
-  safetySidebarLinks.forEach((link) => {
-    link.addEventListener("click", () => {
-      closeSafetySidebar();
-    });
-  });
-
-  sidebarInformationLinks.forEach((link) => {
-    link.addEventListener("click", (event) => {
-      event.preventDefault();
-    });
-  });
-
-  openSimulationButton.addEventListener(
-    "click",
-    openSimulation
-  );
-
-  startExerciseButton.addEventListener(
-    "click",
-    openSimulation
-  );
-
-  closeSimulationButton.addEventListener(
-    "click",
-    closeSimulation
-  );
-
-  clickableClues.forEach((element) => {
-    element.addEventListener("click", () => {
-      markClue(element.dataset.clue);
-    });
-
-    element.addEventListener("keydown", (event) => {
-      if (
-        event.key === "Enter" ||
-        event.key === " "
-      ) {
-        event.preventDefault();
-
-        markClue(element.dataset.clue);
-      }
-    });
-  });
-
-  clueItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      markClue(item.dataset.answer);
-    });
-  });
-
-  revealCluesButton.addEventListener("click", () => {
-    clueItems.forEach((item) => {
-      markClue(item.dataset.answer);
-    });
-  });
-
-  resetCluesButton.addEventListener(
-    "click",
-    resetClues
-  );
-
-  simulationForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    /*
-      Safety protection:
-      The values entered into the simulation are never read,
-      stored, logged, displayed, or transmitted.
-    */
-
-    simulationForm.reset();
-
-    closeModal(simulationModal);
-    openModal(resultModal);
-  });
-
-  finishLessonButton.addEventListener("click", () => {
-    closeModal(resultModal);
-    resetClues();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-
-  teacherButton.addEventListener(
-    "click",
-    openTeacherPanel
-  );
-
-  closeTeacherPanelButton.addEventListener(
-    "click",
-    closeTeacherPanel
-  );
-
-  teacherStartExerciseButton.addEventListener(
-    "click",
-    () => {
-      closeTeacherPanel();
-      openSimulation();
-    }
-  );
-
-  homeLink.addEventListener("click", (event) => {
-    event.preventDefault();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape") {
-      return;
-    }
-
-    if (resultModal.classList.contains("open")) {
-      closeModal(resultModal);
-      return;
-    }
-
-    if (simulationModal.classList.contains("open")) {
-      closeSimulation();
-      return;
-    }
-
-    if (topicModal.classList.contains("open")) {
-      closeModal(topicModal);
-      return;
-    }
-
-    if (safetySidebar.classList.contains("open")) {
-      closeSafetySidebar();
-      menuButton.focus();
-      return;
-    }
-
-    if (teacherPanel.classList.contains("open")) {
-      closeTeacherPanel();
-    }
-  });
-
-  filterTopics();
-  updateClueScore();
-})();
+  .assessment-heading h2 {
+    font-size: 24px;
+  }
+}
