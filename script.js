@@ -54,7 +54,7 @@
     Never place a Secret or service_role key in browser code.
   */
   const SUPABASE_URL =
-    "https://YOUR_PROJECT_REFERENCE.supabase.co";
+    "https://haiakddrdcpzccyqhznt.supabase.co";
 
   const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_KLPB6bHWHMvXRXmenj8yyw_WEh_ADT9";
