@@ -1,1 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="A safe classroom phishing-awareness simulation. No information is collected or transmitted."
+  />
 
+  <title>Account Help — Classroom Security Training</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="training-banner">
+    <strong>CLASSROOM PHISHING SIMULATION</strong>
+    <span>No information is collected, stored, or transmitted.</span>
+  </header>
+
+  <main class="page-shell">
+    <section class="browser-frame" aria-label="Simulated browser window">
+      <div class="browser-top">
+        <div class="browser-dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="address-bar">
+          <span class="warning-icon" aria-hidden="true">⚠</span>
+          <span>accounts-help-security.example/login</span>
+        </div>
+      </div>
+
+      <div class="lesson-strip">
+        <span>Student task:</span>
+        Decide whether this page is legitimate before entering anything.
+      </div>
+
+      <section class="support-page">
+        <div class="brand-mark" aria-hidden="true">
+          <span>A</span>
+        </div>
+
+        <h1>Account Help</h1>
+
+        <p class="subtitle">
+          Confirm your identity to restore access to your account.
+        </p>
+
+        <div class="urgent-message">
+          <strong>Action required:</strong>
+          Your account will be permanently locked in 15 minutes unless you
+          verify now.
+        </div>
+
+        <form id="trainingForm" autocomplete="off" novalidate>
+          <label for="email">Email or phone</label>
+
+          <input
+            id="email"
+            name="email"
+            type="text"
+            placeholder="student@example.com"
+            aria-describedby="privacyNote"
+          />
+
+          <label for="password">Password</label>
+
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            aria-describedby="privacyNote"
+          />
+
+          <div class="form-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="remember" />
+              Keep me signed in
+            </label>
+
+            <a href="#" id="fakeHelpLink">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="primary-button">
+            Verify account
+          </button>
+
+          <p id="privacyNote" class="privacy-note">
+            Training only. Anything typed here stays in your browser and is
+            erased immediately.
+          </p>
+        </form>
+
+        <button
+          id="inspectButton"
+          class="secondary-button"
+          type="button"
+        >
+          Inspect this page for warning signs
+        </button>
+      </section>
+    </section>
+
+    <aside class="teacher-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">PHISHING CHECKLIST</p>
+          <h2>What should students notice?</h2>
+        </div>
+
+        <div class="score" aria-live="polite">
+          <span id="scoreNumber">0</span>/6 found
+        </div>
+      </div>
+
+      <div id="clueList" class="clue-list">
+        <button class="clue" data-clue="url">
+          <span class="clue-number">1</span>
+
+          <span>
+            <strong>Suspicious web address</strong>
+
+            <small>
+              The domain is not an official account or support website.
+            </small>
+          </span>
+        </button>
+
+        <button class="clue" data-clue="urgency">
+          <span class="clue-number">2</span>
+
+          <span>
+            <strong>Artificial urgency</strong>
+
+            <small>
+              Threatening a quick account lock pressures people to act without
+              thinking.
+            </small>
+          </span>
+        </button>
+
+        <button class="clue" data-clue="password">
+          <span class="clue-number">3</span>
+
+          <span>
+            <strong>Unexpected password request</strong>
+
+            <small>
+              Support pages should not ask you to re-enter a password from a
+              random link.
+            </small>
+          </span>
+        </button>
+
+        <button class="clue" data-clue="branding">
+          <span class="clue-number">4</span>
+
+          <span>
+            <strong>Unfamiliar branding</strong>
+
+            <small>
+              The page imitates a familiar style without using verified company
+              branding.
+            </small>
+          </span>
+        </button>
+
+        <button class="clue" data-clue="language">
+          <span class="clue-number">5</span>
+
+          <span>
+            <strong>Vague wording</strong>
+
+            <small>
+              It does not identify the account, issue, or official support
+              case.
+            </small>
+          </span>
+        </button>
+
+        <button class="clue" data-clue="link">
+          <span class="clue-number">6</span>
+
+          <span>
+            <strong>Untrustworthy links</strong>
+
+            <small>
+              Links on suspicious pages may lead somewhere different than
+              expected.
+            </small>
+          </span>
+        </button>
+      </div>
+
+      <div class="teacher-actions">
+        <button id="resetButton" type="button">
+          Reset lesson
+        </button>
+
+        <button id="revealButton" type="button">
+          Reveal all clues
+        </button>
+      </div>
+    </aside>
+  </main>
+
+  <div
+    id="trainingModal"
+    class="modal"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+  >
+    <div class="modal-card">
+      <div class="modal-icon" aria-hidden="true">🛡️</div>
+
+      <h2 id="modalTitle">This was a phishing simulation</h2>
+
+      <p>
+        A real phishing page could have stolen the information entered into
+        that form. This classroom version did not save or send anything.
+      </p>
+
+      <div class="safe-steps">
+        <strong>Safer response:</strong>
+
+        <ol>
+          <li>Do not submit the form.</li>
+          <li>Close the suspicious page.</li>
+          <li>
+            Open the official website yourself using a saved bookmark or typed
+            address.
+          </li>
+          <li>Tell a teacher, parent, or IT administrator.</li>
+        </ol>
+      </div>
+
+      <button
+        id="closeModal"
+        type="button"
+        class="primary-button"
+      >
+        Continue lesson
+      </button>
+    </div>
+  </div>
+
+  <noscript>
+    <div class="noscript-warning">
+      JavaScript is required for the interactive lesson, but the page still
+      does not collect information.
+    </div>
+  </noscript>
+
+  <script src="script.js"></script>
+</body>
+</html>
