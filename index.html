@@ -43,12 +43,12 @@
       </button>
 
       <a class="brand" href="#" id="homeLink">
-        <span class="brand-symbol" aria-hidden="true">
-          <span class="blue"></span>
-          <span class="red"></span>
-          <span class="yellow"></span>
-          <span class="green"></span>
-        </span>
+      <span class="brand-symbol" aria-hidden="true">
+        <span class="blue"></span>
+        <span class="red"></span>
+        <span class="yellow"></span>
+        <span class="green"></span>
+      </span>
 
         <span class="brand-name">Account Help</span>
       </a>
@@ -115,7 +115,7 @@
           <h2>log in to your account</h2>
 
           <p>
-            This account has has been flagged for
+            This account has has been flagged for 
             suspicous activity.
           </p>
         </div>
@@ -214,7 +214,7 @@
             <strong>Two-step verification</strong>
 
             <small>
-              2 Factor Authentication Enabled.
+              2 Factor Authentication Enabled. 
             </small>
           </span>
         </button>
@@ -253,7 +253,7 @@
         <h2>Root cause investigation</h2>
 
         <p>
-          Suspicious behaviour analysis.
+         Suspicious behaviour analysis.
         </p>
       </div>
 
@@ -275,6 +275,7 @@
       <span>No data collection</span>
     </div>
   </footer>
+
 
   <div
     id="sidebarBackdrop"
@@ -301,26 +302,15 @@
       </button>
     </div>
 
-    <nav
-      class="safety-sidebar-navigation"
-      aria-label="Safety help menu"
-    >
+    <nav class="safety-sidebar-navigation" aria-label="Safety help menu">
       <a href="#helpCenter">Help center</a>
       <a href="#safety">Safety</a>
     </nav>
 
     <div class="safety-sidebar-footer">
-      <a href="#" class="sidebar-information-link">
-        Privacy policy
-      </a>
-
-      <a href="#" class="sidebar-information-link">
-        Terms of service
-      </a>
-
-      <a href="#" class="sidebar-information-link">
-        Submit feedback
-      </a>
+      <a href="#privacy-policy">Privacy policy</a>
+      <a href="#terms-of-service">Terms of service</a>
+      <a href="#submit-feedback">Submit feedback</a>
     </div>
   </aside>
 
@@ -372,7 +362,7 @@
 
     <div class="simulation-window">
       <div class="simulation-warning">
-        ENTER CREDENTIALS
+        ENTER CREDENTIALS 
       </div>
 
       <div class="browser-bar">
@@ -404,10 +394,7 @@
 
       <div class="simulation-content">
         <div class="fake-brand">
-          <span
-            class="brand-symbol large-symbol"
-            aria-hidden="true"
-          >
+          <span class="brand-symbol large-symbol" aria-hidden="true">
             <span class="blue"></span>
             <span class="red"></span>
             <span class="yellow"></span>
@@ -415,17 +402,15 @@
           </span>
         </div>
 
-        <h2 id="simulationTitle">
-          Account verification required
-        </h2>
+        <h2 id="simulationTitle">Account verification required</h2>
 
         <p
           class="fake-message clickable-clue"
           data-clue="vague"
           tabindex="0"
         >
-          We noticed an issue with your account. Confirm your
-          information to continue using all services.
+          We noticed an issue with your account. Confirm your information to
+          continue using all services.
         </p>
 
         <div
@@ -433,23 +418,15 @@
           data-clue="urgency"
           tabindex="0"
         >
-          <strong>
-            Your account will be disabled in 10 minutes.
-          </strong>
+          <strong>Your account will be disabled in 10 minutes.</strong>
 
           <span>
             Verify immediately to avoid losing access.
           </span>
         </div>
 
-        <form
-          id="simulationForm"
-          autocomplete="off"
-          novalidate
-        >
-          <label for="simulationEmail">
-            Email address
-          </label>
+        <form id="simulationForm" autocomplete="off" novalidate>
+          <label for="simulationEmail">Email address</label>
 
           <input
             id="simulationEmail"
@@ -524,13 +501,8 @@
             <span class="clue-number">1</span>
 
             <span>
-              <strong>
-                Suspicious website address
-              </strong>
-
-              <small>
-                The address is an official service domain.
-              </small>
+              <strong>Suspicious website address</strong>
+              <small>The address is an official service domain.</small>
             </span>
           </button>
 
@@ -543,7 +515,6 @@
 
             <span>
               <strong>Urgent threat</strong>
-
               <small>
                 Network Threat Assessment
               </small>
@@ -559,12 +530,9 @@
 
             <span>
               <strong>Vague account problem</strong>
-
               <small>
-                An attacker gained unauthorized access to your
-                account by exploiting a vulnerability and/or
-                phishing, then used malware to steal data and
-                disrupt access.
+                An attacker gained unauthorized access to your account by exploiting a vulnerability and/or phishing, 
+                then used malware to steal data and disrupt access.
               </small>
             </span>
           </button>
@@ -577,10 +545,7 @@
             <span class="clue-number">4</span>
 
             <span>
-              <strong>
-                Unexpected password request
-              </strong>
-
+              <strong>Unexpected password request</strong>
               <small>
                 Threat Identification and Response Centre
               </small>
@@ -595,13 +560,9 @@
             <span class="clue-number">5</span>
 
             <span>
-              <strong>
-                Verification code request
-              </strong>
-
+              <strong>Verification code request</strong>
               <small>
-                Security codes should never be shared with
-                another person.
+                Security codes should never be shared with another person.
               </small>
             </span>
           </button>
@@ -629,6 +590,105 @@
   </div>
 
   <div
+    id="assessmentModal"
+    class="modal assessment-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="assessmentTitle"
+  >
+    <div
+      class="modal-overlay"
+      data-close-modal="assessment"
+    ></div>
+
+    <div class="assessment-card">
+      <button
+        id="closeAssessment"
+        class="modal-close assessment-close"
+        type="button"
+        aria-label="Close security awareness form"
+      >
+        ×
+      </button>
+
+      <div class="assessment-heading">
+        <span
+          class="brand-symbol assessment-symbol"
+          aria-hidden="true"
+        >
+          <span class="blue"></span>
+          <span class="red"></span>
+          <span class="yellow"></span>
+          <span class="green"></span>
+        </span>
+
+        <div>
+          <p class="section-label">SECURITY AWARENESS</p>
+          <h2 id="assessmentTitle">Safety knowledge form</h2>
+        </div>
+      </div>
+
+      <p class="assessment-introduction">
+        protect your selves from malicous attacks at all times.
+      </p>
+
+      <form id="assessmentForm" autocomplete="off">
+        <label class="assessment-question" for="malwareAnswer">
+          <span>1. What is malware?</span>
+          <textarea
+            id="malwareAnswer"
+            name="malwareAnswer"
+            rows="4"
+            placeholder="Type your answer here"
+            required
+          ></textarea>
+        </label>
+
+        <label class="assessment-question" for="phishingAnswer">
+          <span>2. What is phishing?</span>
+          <textarea
+            id="phishingAnswer"
+            name="phishingAnswer"
+            rows="4"
+            placeholder="Type your answer here"
+            required
+          ></textarea>
+        </label>
+
+        <label class="assessment-question" for="awarenessAnswer">
+          <span>3. How do I be aware of this?</span>
+          <textarea
+            id="awarenessAnswer"
+            name="awarenessAnswer"
+            rows="4"
+            placeholder="Type your answer here"
+            required
+          ></textarea>
+        </label>
+
+        <label class="assessment-question" for="improvementAnswer">
+          <span>4. What can I do better?</span>
+          <textarea
+            id="improvementAnswer"
+            name="improvementAnswer"
+            rows="4"
+            placeholder="Type your answer here"
+            required
+          ></textarea>
+        </label>
+
+        <button
+          class="primary-button full-width assessment-submit"
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div
     id="resultModal"
     class="modal result-modal"
     role="dialog"
@@ -641,18 +701,15 @@
     <div class="result-card">
       <div class="shield-circle">🛡</div>
 
-      <p class="section-label">
-        LESSON COMPLETE
-      </p>
+      <p class="section-label">LESSON COMPLETE</p>
 
       <h2 id="resultTitle">
         This was a phishing simulation
       </h2>
 
       <p>
-        An attacker targeted my site with a phishing campaign,
-        stole my credentials, logged in as me, and then installed
-        malicious software to access and exfiltrate data.
+        An attacker targeted my site with a phishing campaign, stole my credentials, 
+        logged in as me, and then installed malicious software to access and exfiltrate data.
       </p>
 
       <div class="safety-steps">
@@ -684,10 +741,7 @@
   >
     <div class="teacher-drawer-header">
       <div>
-        <p class="section-label">
-          TEACHER CONTROLS
-        </p>
-
+        <p class="section-label">TEACHER CONTROLS</p>
         <h2>Lesson guide</h2>
       </div>
 
@@ -705,25 +759,11 @@
       <h3>Suggested lesson</h3>
 
       <ol>
-        <li>
-          Ask students to inspect the page before clicking
-          anything.
-        </li>
-
+        <li>Ask students to inspect the page before clicking anything.</li>
         <li>Open the simulated warning.</li>
-
-        <li>
-          Ask students to identify each suspicious element.
-        </li>
-
-        <li>
-          Discuss why urgency changes decision-making.
-        </li>
-
-        <li>
-          Explain why passwords and verification codes stay
-          private.
-        </li>
+        <li>Ask students to identify each suspicious element.</li>
+        <li>Discuss why urgency changes decision-making.</li>
+        <li>Explain why passwords and verification codes stay private.</li>
       </ol>
 
       <div class="teacher-note">
