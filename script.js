@@ -1,325 +1,749 @@
-(() => {
-  "use strict";
-
-  const helpSearch = document.getElementById("helpSearch");
-  const clearSearchButton = document.getElementById("clearSearch");
-  const topicCards = Array.from(
-    document.querySelectorAll(".topic-card")
-  );
-  const noResults = document.getElementById("noResults");
-
-  const topicModal = document.getElementById("topicModal");
-  const topicModalTitle = document.getElementById("topicModalTitle");
-  const topicModalDescription = document.getElementById(
-    "topicModalDescription"
-  );
-
-  const simulationModal = document.getElementById("simulationModal");
-  const simulationForm = document.getElementById("simulationForm");
-  const openSimulationButton = document.getElementById(
-    "openSimulation"
-  );
-  const startExerciseButton = document.getElementById(
-    "startExercise"
-  );
-  const closeSimulationButton = document.getElementById(
-    "closeSimulation"
-  );
-
-  const clueItems = Array.from(
-    document.querySelectorAll(".clue-item")
-  );
-  const clickableClues = Array.from(
-    document.querySelectorAll(".clickable-clue")
-  );
-  const clueScore = document.getElementById("clueScore");
-  const revealCluesButton = document.getElementById("revealClues");
-  const resetCluesButton = document.getElementById("resetClues");
-
-  const resultModal = document.getElementById("resultModal");
-  const finishLessonButton = document.getElementById("finishLesson");
-
-  const teacherButton = document.getElementById("teacherButton");
-  const teacherPanel = document.getElementById("teacherPanel");
-  const closeTeacherPanelButton = document.getElementById(
-    "closeTeacherPanel"
-  );
-  const teacherStartExerciseButton = document.getElementById(
-    "teacherStartExercise"
-  );
-
-  const homeLink = document.getElementById("homeLink");
-
-  function filterTopics() {
-    const searchValue = helpSearch.value
-      .trim()
-      .toLowerCase();
-
-    let visibleTopics = 0;
-
-    topicCards.forEach((card) => {
-      const searchableText = `
-        ${card.dataset.title}
-        ${card.dataset.description}
-        ${card.textContent}
-      `.toLowerCase();
-
-      const matchesSearch =
-        searchValue === "" ||
-        searchableText.includes(searchValue);
-
-      card.classList.toggle("hidden", !matchesSearch);
-
-      if (matchesSearch) {
-        visibleTopics += 1;
-      }
-    });
-
-    noResults.hidden = visibleTopics !== 0;
-    clearSearchButton.style.visibility =
-      searchValue === "" ? "hidden" : "visible";
-  }
-
-  function openModal(modal) {
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden", "false");
-
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeModal(modal) {
-    modal.classList.remove("open");
-    modal.setAttribute("aria-hidden", "true");
-
-    const anotherModalOpen = document.querySelector(".modal.open");
-
-    if (!anotherModalOpen) {
-      document.body.style.overflow = "";
-    }
-  }
-
-  function openTopic(card) {
-    topicModalTitle.textContent =
-      card.dataset.title || "Help topic";
-
-    topicModalDescription.textContent =
-      card.dataset.description ||
-      "This topic is part of the classroom security lesson.";
-
-    openModal(topicModal);
-  }
-
-  function updateClueScore() {
-    const foundCount = clueItems.filter((item) =>
-      item.classList.contains("found")
-    ).length;
-
-    clueScore.textContent = String(foundCount);
-  }
-
-  function highlightClue(clueName) {
-    clickableClues.forEach((element) => {
-      if (element.dataset.clue === clueName) {
-        element.classList.add("clue-highlight");
-
-        window.setTimeout(() => {
-          element.classList.remove("clue-highlight");
-        }, 1300);
-      }
-    });
-  }
-
-  function markClue(clueName) {
-    const clueItem = clueItems.find(
-      (item) => item.dataset.answer === clueName
-    );
-
-    if (!clueItem) {
-      return;
-    }
-
-    clueItem.classList.add("found");
-
-    highlightClue(clueName);
-    updateClueScore();
-  }
-
-  function resetClues() {
-    clueItems.forEach((item) => {
-      item.classList.remove("found");
-    });
-
-    clickableClues.forEach((element) => {
-      element.classList.remove("clue-highlight");
-    });
-
-    simulationForm.reset();
-    updateClueScore();
-  }
-
-  function openSimulation() {
-    resetClues();
-    openModal(simulationModal);
-  }
-
-  function closeSimulation() {
-    simulationForm.reset();
-    closeModal(simulationModal);
-  }
-
-  function openTeacherPanel() {
-    teacherPanel.classList.add("open");
-    teacherPanel.setAttribute("aria-hidden", "false");
-  }
-
-  function closeTeacherPanel() {
-    teacherPanel.classList.remove("open");
-    teacherPanel.setAttribute("aria-hidden", "true");
-  }
-
-  helpSearch.addEventListener("input", filterTopics);
-
-  clearSearchButton.addEventListener("click", () => {
-    helpSearch.value = "";
-    filterTopics();
-    helpSearch.focus();
-  });
-
-  topicCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      openTopic(card);
-    });
-  });
-
-  document
-    .querySelectorAll('[data-close-modal="topic"]')
-    .forEach((button) => {
-      button.addEventListener("click", () => {
-        closeModal(topicModal);
-      });
-    });
-
-  openSimulationButton.addEventListener(
-    "click",
-    openSimulation
-  );
-
-  startExerciseButton.addEventListener(
-    "click",
-    openSimulation
-  );
-
-  closeSimulationButton.addEventListener(
-    "click",
-    closeSimulation
-  );
-
-  clickableClues.forEach((element) => {
-    element.addEventListener("click", () => {
-      markClue(element.dataset.clue);
-    });
-
-    element.addEventListener("keydown", (event) => {
-      if (
-        event.key === "Enter" ||
-        event.key === " "
-      ) {
-        event.preventDefault();
-        markClue(element.dataset.clue);
-      }
-    });
-  });
-
-  clueItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      markClue(item.dataset.answer);
-    });
-  });
-
-  revealCluesButton.addEventListener("click", () => {
-    clueItems.forEach((item) => {
-      markClue(item.dataset.answer);
-    });
-  });
-
-  resetCluesButton.addEventListener(
-    "click",
-    resetClues
-  );
-
-  simulationForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    /*
-      Safety protection:
-      The values entered into the simulation are never read,
-      stored, logged, displayed, or transmitted.
-    */
-
-    simulationForm.reset();
-    closeModal(simulationModal);
-    openModal(resultModal);
-  });
-
-  finishLessonButton.addEventListener("click", () => {
-    closeModal(resultModal);
-    resetClues();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-
-  teacherButton.addEventListener(
-    "click",
-    openTeacherPanel
-  );
-
-  closeTeacherPanelButton.addEventListener(
-    "click",
-    closeTeacherPanel
-  );
-
-  teacherStartExerciseButton.addEventListener("click", () => {
-    closeTeacherPanel();
-    openSimulation();
-  });
-
-  homeLink.addEventListener("click", (event) => {
-    event.preventDefault();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape") {
-      return;
-    }
-
-    if (resultModal.classList.contains("open")) {
-      closeModal(resultModal);
-      return;
-    }
-
-    if (simulationModal.classList.contains("open")) {
-      closeSimulation();
-      return;
-    }
-
-    if (topicModal.classList.contains("open")) {
-      closeModal(topicModal);
-      return;
-    }
-
-    if (teacherPanel.classList.contains("open")) {
-      closeTeacherPanel();
-    }
-  });
-
-  filterTopics();
-  updateClueScore();
-})();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="description"
+    content="A safe classroom phishing-awareness simulation. No information is collected or transmitted."
+  />
+
+  <title>Account Help Centre — Security breach scan</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="training-banner">
+    <strong>Breach detection</strong>
+
+    <span>
+      Intusive Threat Detected.
+    </span>
+  </header>
+
+  <nav class="top-navigation">
+    <div class="nav-left">
+      <button
+        id="menuButton"
+        class="menu-button"
+        type="button"
+        aria-label="Open safety menu"
+        aria-controls="safetySidebar"
+        aria-expanded="false"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <a class="brand" href="#" id="homeLink">
+        <span class="brand-symbol" aria-hidden="true">
+          <span class="blue"></span>
+          <span class="red"></span>
+          <span class="yellow"></span>
+          <span class="green"></span>
+        </span>
+
+        <span class="brand-name">Account Help</span>
+      </a>
+    </div>
+
+    <div class="nav-actions">
+      <button
+        class="icon-button"
+        id="teacherButton"
+        type="button"
+        aria-label="Open teacher controls"
+      >
+        ?
+      </button>
+
+      <button
+        class="profile-button"
+        type="button"
+        aria-label="Training profile"
+      >
+        T
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <section id="helpCenter" class="hero-section">
+      <div class="hero-content">
+        <p class="training-label">ONLINE SAFETY ENFORCEMENT</p>
+
+        <h1>How can we help?</h1>
+
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true"></span>
+
+          <input
+            id="helpSearch"
+            type="search"
+            placeholder="Describe your issue"
+            autocomplete="off"
+          />
+
+          <button
+            id="clearSearch"
+            class="clear-search"
+            type="button"
+            aria-label="Clear search"
+          >
+            ×
+          </button>
+        </div>
+
+        <p class="hero-description">
+          Activity monitoring
+        </p>
+      </div>
+    </section>
+
+    <section class="account-section">
+      <div class="account-card">
+        <div class="account-avatar">S</div>
+
+        <div class="account-information">
+          <h2>log in to your account</h2>
+
+          <p>
+            This account has has been flagged for
+            suspicous activity.
+          </p>
+        </div>
+
+        <button
+          id="startExercise"
+          class="outline-button"
+          type="button"
+        >
+          Start security check
+        </button>
+      </div>
+    </section>
+
+    <section class="topics-section">
+      <h2>Browse help topics</h2>
+
+      <div id="topicGrid" class="topic-grid">
+        <button
+          class="topic-card"
+          type="button"
+          data-title="Protect your account"
+          data-description="Learn how to recognize suspicious messages, links, login pages, and password requests."
+        >
+          <span class="topic-icon blue-icon">🛡</span>
+
+          <span>
+            <strong>Protect your account</strong>
+
+            <small>
+              Recognizing suspicious messages and login requests.
+            </small>
+          </span>
+        </button>
+
+        <button
+          class="topic-card"
+          type="button"
+          data-title="Password safety"
+          data-description="Use unique passwords and never enter your password after following an unexpected link."
+        >
+          <span class="topic-icon red-icon">🔑</span>
+
+          <span>
+            <strong>Password safety</strong>
+
+            <small>
+              Digital Cyber Investigation Underway.
+            </small>
+          </span>
+        </button>
+
+        <button
+          class="topic-card"
+          type="button"
+          data-title="Suspicious emails"
+          data-description="Check the sender, spelling, link destination, urgency, attachments, and requested information."
+        >
+          <span class="topic-icon yellow-icon">✉</span>
+
+          <span>
+            <strong>Suspicious emails</strong>
+
+            <small>
+              Check senders, links, wording, and attachments.
+            </small>
+          </span>
+        </button>
+
+        <button
+          class="topic-card"
+          type="button"
+          data-title="Website addresses"
+          data-description="Read a website address carefully and identify the real domain before signing in."
+        >
+          <span class="topic-icon green-icon">🌐</span>
+
+          <span>
+            <strong>Website addresses</strong>
+
+            <small>
+              Identifying misleading and misspelled domains.
+            </small>
+          </span>
+        </button>
+
+        <button
+          class="topic-card"
+          type="button"
+          data-title="Two-step verification"
+          data-description="Two-step verification adds protection, but verification codes should never be shared with another person."
+        >
+          <span class="topic-icon blue-icon">✓</span>
+
+          <span>
+            <strong>Two-step verification</strong>
+
+            <small>
+              2 Factor Authentication Enabled.
+            </small>
+          </span>
+        </button>
+
+        <button
+          class="topic-card"
+          type="button"
+          data-title="Report phishing"
+          data-description="Do not reply. Close the page and report the message to a teacher, parent, employer, or IT administrator."
+        >
+          <span class="topic-icon red-icon">⚑</span>
+
+          <span>
+            <strong>Report phishing</strong>
+
+            <small>
+              Network log analysis and Evidence collection.
+            </small>
+          </span>
+        </button>
+      </div>
+
+      <div id="noResults" class="no-results" hidden>
+        <h3>No matching help topics</h3>
+
+        <p>
+          Attack timeline. approx. 22*24*72
+        </p>
+      </div>
+    </section>
+
+    <section id="safety" class="lesson-section">
+      <div>
+        <p class="section-label">CLASS ACTIVITY</p>
+
+        <h2>Root cause investigation</h2>
+
+        <p>
+          Suspicious behaviour analysis.
+        </p>
+      </div>
+
+      <button
+        id="openSimulation"
+        class="primary-button"
+        type="button"
+      >
+        Open simulated warning
+      </button>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <span>Classroom Security Training</span>
+      <span>Privacy</span>
+      <span>Safety</span>
+      <span>No data collection</span>
+    </div>
+  </footer>
+
+  <div
+    id="sidebarBackdrop"
+    class="sidebar-backdrop"
+    aria-hidden="true"
+  ></div>
+
+  <aside
+    id="safetySidebar"
+    class="safety-sidebar"
+    aria-hidden="true"
+    aria-labelledby="safetySidebarTitle"
+  >
+    <div class="safety-sidebar-header">
+      <h2 id="safetySidebarTitle">Safety help</h2>
+
+      <button
+        id="closeSafetySidebar"
+        class="sidebar-close"
+        type="button"
+        aria-label="Close safety menu"
+      >
+        ×
+      </button>
+    </div>
+
+    <nav
+      class="safety-sidebar-navigation"
+      aria-label="Safety help menu"
+    >
+      <a href="#helpCenter">Help center</a>
+      <a href="#safety">Safety</a>
+    </nav>
+
+    <div class="safety-sidebar-footer">
+      <a href="#" class="sidebar-information-link">
+        Privacy policy
+      </a>
+
+      <a href="#" class="sidebar-information-link">
+        Terms of service
+      </a>
+
+      <a href="#" class="sidebar-information-link">
+        Submit feedback
+      </a>
+    </div>
+  </aside>
+
+  <div
+    id="topicModal"
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="topicModalTitle"
+  >
+    <div class="modal-overlay" data-close-modal="topic"></div>
+
+    <div class="information-modal">
+      <button
+        class="modal-close"
+        type="button"
+        data-close-modal="topic"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+      <div class="large-topic-icon">?</div>
+
+      <h2 id="topicModalTitle">Help topic</h2>
+
+      <p id="topicModalDescription"></p>
+
+      <button
+        class="primary-button full-width"
+        type="button"
+        data-close-modal="topic"
+      >
+        Done
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="simulationModal"
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="simulationTitle"
+  >
+    <div class="modal-overlay"></div>
+
+    <div class="simulation-window">
+      <div class="simulation-warning">
+        ENTER CREDENTIALS
+      </div>
+
+      <div class="browser-bar">
+        <div class="browser-buttons" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div
+          id="fakeAddress"
+          class="fake-address clickable-clue"
+          data-clue="address"
+          tabindex="0"
+        >
+          <span class="address-warning">⚠</span>
+          account-security-help./verification
+        </div>
+
+        <button
+          id="closeSimulation"
+          class="browser-close"
+          type="button"
+          aria-label="Close simulation"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="simulation-content">
+        <div class="fake-brand">
+          <span
+            class="brand-symbol large-symbol"
+            aria-hidden="true"
+          >
+            <span class="blue"></span>
+            <span class="red"></span>
+            <span class="yellow"></span>
+            <span class="green"></span>
+          </span>
+        </div>
+
+        <h2 id="simulationTitle">
+          Account verification required
+        </h2>
+
+        <p
+          class="fake-message clickable-clue"
+          data-clue="vague"
+          tabindex="0"
+        >
+          We noticed an issue with your account. Confirm your
+          information to continue using all services.
+        </p>
+
+        <div
+          class="urgent-alert clickable-clue"
+          data-clue="urgency"
+          tabindex="0"
+        >
+          <strong>
+            Your account will be disabled in 10 minutes.
+          </strong>
+
+          <span>
+            Verify immediately to avoid losing access.
+          </span>
+        </div>
+
+        <form
+          id="simulationForm"
+          autocomplete="off"
+          novalidate
+        >
+          <label for="simulationEmail">
+            Email address
+          </label>
+
+          <input
+            id="simulationEmail"
+            type="text"
+            placeholder="student@example.com"
+          />
+
+          <div
+            class="clue-field clickable-clue"
+            data-clue="password"
+            tabindex="0"
+          >
+            <label for="simulationPassword">
+              Enter your current password
+            </label>
+
+            <input
+              id="simulationPassword"
+              type="password"
+              placeholder="Password"
+            />
+          </div>
+
+          <div
+            class="verification-request clickable-clue"
+            data-clue="code"
+            tabindex="0"
+          >
+            <label for="simulationCode">
+              Two-step verification code
+            </label>
+
+            <input
+              id="simulationCode"
+              type="text"
+              inputmode="numeric"
+              placeholder="6-digit code"
+            />
+          </div>
+
+          <button
+            class="fake-submit-button"
+            type="submit"
+          >
+            Verify now
+          </button>
+
+          <p class="simulation-privacy">
+            Security Threat Assessment
+          </p>
+        </form>
+      </div>
+
+      <aside class="clue-panel">
+        <div class="clue-heading">
+          <div>
+            <p class="section-label">PHISHING CLUES</p>
+            <h3>Find all five warning signs</h3>
+          </div>
+
+          <div class="clue-score">
+            <span id="clueScore">0</span>/5
+          </div>
+        </div>
+
+        <div class="clue-list">
+          <button
+            class="clue-item"
+            type="button"
+            data-answer="address"
+          >
+            <span class="clue-number">1</span>
+
+            <span>
+              <strong>
+                Suspicious website address
+              </strong>
+
+              <small>
+                The address is an official service domain.
+              </small>
+            </span>
+          </button>
+
+          <button
+            class="clue-item"
+            type="button"
+            data-answer="urgency"
+          >
+            <span class="clue-number">2</span>
+
+            <span>
+              <strong>Urgent threat</strong>
+
+              <small>
+                Network Threat Assessment
+              </small>
+            </span>
+          </button>
+
+          <button
+            class="clue-item"
+            type="button"
+            data-answer="vague"
+          >
+            <span class="clue-number">3</span>
+
+            <span>
+              <strong>Vague account problem</strong>
+
+              <small>
+                An attacker gained unauthorized access to your
+                account by exploiting a vulnerability and/or
+                phishing, then used malware to steal data and
+                disrupt access.
+              </small>
+            </span>
+          </button>
+
+          <button
+            class="clue-item"
+            type="button"
+            data-answer="password"
+          >
+            <span class="clue-number">4</span>
+
+            <span>
+              <strong>
+                Unexpected password request
+              </strong>
+
+              <small>
+                Threat Identification and Response Centre
+              </small>
+            </span>
+          </button>
+
+          <button
+            class="clue-item"
+            type="button"
+            data-answer="code"
+          >
+            <span class="clue-number">5</span>
+
+            <span>
+              <strong>
+                Verification code request
+              </strong>
+
+              <small>
+                Security codes should never be shared with
+                another person.
+              </small>
+            </span>
+          </button>
+        </div>
+
+        <div class="clue-controls">
+          <button
+            id="revealClues"
+            class="outline-button"
+            type="button"
+          >
+            ExposureCheck
+          </button>
+
+          <button
+            id="resetClues"
+            class="text-button"
+            type="button"
+          >
+            Reset
+          </button>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div
+    id="resultModal"
+    class="modal result-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="resultTitle"
+  >
+    <div class="modal-overlay"></div>
+
+    <div class="result-card">
+      <div class="shield-circle">🛡</div>
+
+      <p class="section-label">
+        LESSON COMPLETE
+      </p>
+
+      <h2 id="resultTitle">
+        This was a phishing simulation
+      </h2>
+
+      <p>
+        An attacker targeted my site with a phishing campaign,
+        stole my credentials, logged in as me, and then installed
+        malicious software to access and exfiltrate data.
+      </p>
+
+      <div class="safety-steps">
+        <h3>What should you do instead?</h3>
+
+        <ol>
+          <li>Enter login Credentials</li>
+          <li>Do not share codes with anyone else</li>
+          <li>Contact Cyber security defense</li>
+          <li>Complete form to do the info check</li>
+          <li>Wait for security code conformation</li>
+        </ol>
+      </div>
+
+      <button
+        id="finishLesson"
+        class="primary-button full-width"
+        type="button"
+      >
+        Return to Help Centre
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="teacherPanel"
+    class="teacher-drawer"
+    aria-hidden="true"
+  >
+    <div class="teacher-drawer-header">
+      <div>
+        <p class="section-label">
+          TEACHER CONTROLS
+        </p>
+
+        <h2>Lesson guide</h2>
+      </div>
+
+      <button
+        id="closeTeacherPanel"
+        class="modal-close"
+        type="button"
+        aria-label="Close teacher controls"
+      >
+        ×
+      </button>
+    </div>
+
+    <div class="teacher-content">
+      <h3>Suggested lesson</h3>
+
+      <ol>
+        <li>
+          Ask students to inspect the page before clicking
+          anything.
+        </li>
+
+        <li>Open the simulated warning.</li>
+
+        <li>
+          Ask students to identify each suspicious element.
+        </li>
+
+        <li>
+          Discuss why urgency changes decision-making.
+        </li>
+
+        <li>
+          Explain why passwords and verification codes stay
+          private.
+        </li>
+      </ol>
+
+      <div class="teacher-note">
+        <strong>Safety note</strong>
+
+        <p>
+          Account Access Monitoring System.
+        </p>
+      </div>
+
+      <button
+        id="teacherStartExercise"
+        class="primary-button full-width"
+        type="button"
+      >
+        Begin student exercise
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
