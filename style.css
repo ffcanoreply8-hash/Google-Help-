@@ -1203,3 +1203,18 @@ footer {
     padding: 24px 18px;
   }
 }
+/* Remove the five warning signs panel */
+
+.clue-panel {
+  display: none;
+}
+
+.simulation-window {
+  width: min(720px, 100%);
+  grid-template-columns: 1fr;
+}
+
+.simulation-content {
+  border-right: 0;
+  border-bottom: 0;
+}
