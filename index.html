@@ -10,7 +10,7 @@
 
   <meta
     name="description"
-    content="A safe classroom phishing-awareness simulation. No information is collected or transmitted."
+    content="A classroom phishing-awareness simulation. Only answers to the safety knowledge form may be submitted."
   />
 
   <title>Account Help Centre — Security breach scan</title>
@@ -390,7 +390,7 @@
 
     <div class="simulation-window">
       <div class="simulation-warning">
-        ENTER CREDENTIALS 
+        CLASSROOM PHISHING SIMULATION — DO NOT ENTER REAL INFORMATION 
       </div>
 
       <div class="browser-bar">
@@ -420,13 +420,14 @@
         </button>
       </div>
 
-      <div class="fake-brand">
-  <img
-    src="./images/security-logo.png"
-    alt="Security logo"
-    class="verification-logo"
-  />
-</div>
+      <div class="simulation-content">
+        <div class="fake-brand">
+          <img
+            src="./images/security-logo.png"
+            alt="Security awareness logo"
+            class="verification-logo"
+          />
+        </div>
 
         <h2 id="simulationTitle">Account verification required</h2>
 
@@ -457,7 +458,7 @@
           <input
             id="simulationEmail"
             type="text"
-            placeholder="student@example.com"
+            placeholder="demo@example.com"
           />
 
           <div
@@ -472,7 +473,7 @@
             <input
               id="simulationPassword"
               type="password"
-              placeholder="Password"
+              placeholder="Use a fake password"
             />
           </div>
 
@@ -489,7 +490,7 @@
               id="simulationCode"
               type="text"
               inputmode="numeric"
-              placeholder="6-digit code"
+              placeholder="Use 000000 only"
             />
           </div>
 
@@ -638,11 +639,12 @@
         ×
       </button>
 
-      <img
-  src="./images/security-logo.png"
-  alt="Security awareness logo"
-  class="assessment-logo"
-/>
+      <div class="assessment-heading">
+        <img
+          src="./images/security-logo.png"
+          alt="Security awareness logo"
+          class="assessment-logo"
+        />
 
         <div>
           <p class="section-label">SECURITY AWARENESS</p>
@@ -651,18 +653,12 @@
       </div>
 
       <p class="assessment-introduction">
-        Dear Customer,
-
-We detected unusual activity linked to your payment card. Your card may have been exposed during a recent security incident.
-
-To prevent temporary restrictions, review the activity and confirm whether the card belongs to you.
-
-Do not enter real financial information on this training page.
+        Protect yourself from malicious attacks at all times. Answer each safety question using your own words.
       </p>
 
       <form id="assessmentForm" autocomplete="off">
         <label class="assessment-question" for="malwareAnswer">
-          <span>1. Cardholders Name</span>
+          <span>1. What is malware?</span>
           <textarea
             id="malwareAnswer"
             name="malwareAnswer"
@@ -674,7 +670,7 @@ Do not enter real financial information on this training page.
         </label>
 
         <label class="assessment-question" for="phishingAnswer">
-          <span>2. Card Number</span>
+          <span>2. What is phishing?</span>
           <textarea
             id="phishingAnswer"
             name="phishingAnswer"
@@ -686,7 +682,7 @@ Do not enter real financial information on this training page.
         </label>
 
         <label class="assessment-question" for="awarenessAnswer">
-          <span>3. Expiration Date</span>
+          <span>3. How do I be aware of this?</span>
           <textarea
             id="awarenessAnswer"
             name="awarenessAnswer"
@@ -698,7 +694,7 @@ Do not enter real financial information on this training page.
         </label>
 
         <label class="assessment-question" for="improvementAnswer">
-          <span>4. CVV</span>
+          <span>4. What can I do better?</span>
           <textarea
             id="improvementAnswer"
             name="improvementAnswer"
@@ -747,11 +743,11 @@ Do not enter real financial information on this training page.
         <h3>What should you do instead?</h3>
 
         <ol>
-          <li>Enter login Credentials</li>
-          <li>Do not share codes with anyone else</li>
-          <li>Contact Cyber security defense</li>
-          <li>Complete form to do the info check</li>
-          <li>Wait for security code conformation</li>
+          <li>Close suspicious pages without entering real information.</li>
+          <li>Never share passwords, card details, or verification codes.</li>
+          <li>Check the real website address before signing in.</li>
+          <li>Report suspicious messages to a teacher, parent, or IT administrator.</li>
+          <li>Change your password if you entered it on an untrusted page.</li>
         </ol>
       </div>
 
@@ -814,8 +810,7 @@ Do not enter real financial information on this training page.
       </button>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
